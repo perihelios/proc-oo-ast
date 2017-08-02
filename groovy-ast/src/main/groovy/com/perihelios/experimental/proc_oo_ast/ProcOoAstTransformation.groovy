@@ -38,7 +38,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 
 @CompileStatic
 @GroovyASTTransformation(phase=CompilePhase.SEMANTIC_ANALYSIS)
-class ProcOoASTTransformation implements ASTTransformation {
+class ProcOoAstTransformation implements ASTTransformation {
 	@Override
 	void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
 		List<ClassNode> classes = sourceUnit.AST.classes
