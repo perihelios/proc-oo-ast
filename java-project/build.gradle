@@ -1,0 +1,29 @@
+group 'com.perihelios.experimental'
+version '0.0.1'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "com.perihelios.experimental.proc_oo_ast.ExampleUsage"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+	compile project(':groovy-ast')
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+compileGroovy {
+//	options.forkOptions.jvmArgs = ["-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"]
+}
+
+run {
+//	jvmArgs = ["-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"]
+}
