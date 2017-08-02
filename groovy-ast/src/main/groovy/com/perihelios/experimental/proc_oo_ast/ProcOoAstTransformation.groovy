@@ -37,7 +37,7 @@ import org.codehaus.groovy.transform.ASTTransformation
 import org.codehaus.groovy.transform.GroovyASTTransformation
 
 @CompileStatic
-@GroovyASTTransformation(phase=CompilePhase.SEMANTIC_ANALYSIS)
+@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 class ProcOoAstTransformation implements ASTTransformation {
 	@Override
 	void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
@@ -46,93 +46,9 @@ class ProcOoAstTransformation implements ASTTransformation {
 		for (ClassNode clazz : classes) {
 			clazz.methods.each { MethodNode method ->
 				for (ListIterator<Statement> statements = ((BlockStatement) method.code).statements.listIterator();
-				     statements; ) {
+				     statements;) {
 					statements.set(tweakStatement(statements.next()))
 				}
-			}
-
-			if (clazz.annotations.any { it.classNode.name == ObjectOriented.name }) {
-				List<MethodNode> ooMethods = []
-
-				clazz.methods.findAll { MethodNode method ->
-					method.static &&
-					method.public &&
-					method.parameters.length >= 1 &&
-					method.parameters[0].type.name == clazz.name
-				}.each { MethodNode method ->
-					BlockStatement blockStatement = new BlockStatement([], method.variableScope)
-					ClassNode returnType
-
-					if (method.parameters[0].annotations.any { it.classNode.name == OoCopy.name } &&
-							method.voidMethod) {
-						blockStatement.statements << new ExpressionStatement(
-							new DeclarationExpression(
-								new VariableExpression("__oo_injection", clazz),
-								Token.newSymbol("=", -1, -1),
-								new ConstructorCallExpression(clazz, new ArgumentListExpression(
-									new VariableExpression(method.parameters[0].name, clazz)
-								))
-							)
-						)
-
-						blockStatement.statements << new ExpressionStatement(
-							new StaticMethodCallExpression(clazz, method.name, new ArgumentListExpression(
-								[new VariableExpression("__oo_injection", clazz)] +
-								(method.parameters as List<Parameter>)
-									.subList(1, method.parameters.length).collect { Parameter param ->
-										new VariableExpression(param.name, param.type)
-									} as List<Expression>
-							))
-						)
-
-						// Copy of ClassNode is necessary to avoid error: "A transform used a generics containing
-						// ClassNode..."
-						returnType = ClassHelper.make(clazz.name)
-
-						blockStatement.statements << new ReturnStatement(
-							new VariableExpression("__oo_injection", returnType)
-						)
-					} else {
-						returnType = method.returnType
-
-						if (method.isVoidMethod()) {
-							blockStatement.statements << new ExpressionStatement(
-								new StaticMethodCallExpression(clazz, method.name, new ArgumentListExpression(
-									method.parameters.collect { Parameter param ->
-										new VariableExpression(param.name, param.type)
-									} as List<Expression>
-								))
-							)
-						} else {
-							blockStatement.statements << new ExpressionStatement(
-								new DeclarationExpression(
-									new VariableExpression("__oo_injection", returnType),
-									Token.newSymbol("=", -1, -1),
-									new StaticMethodCallExpression(clazz, method.name, new ArgumentListExpression(
-										method.parameters.collect { Parameter param ->
-											new VariableExpression(param.name, param.type)
-										} as List<Expression>
-									))
-								)
-							)
-
-							blockStatement.statements << new ReturnStatement(
-								new VariableExpression("__oo_injection", returnType)
-							)
-						}
-					}
-
-					ooMethods << new MethodNode(
-						"__oo_injection__" + method.name,
-						MethodNode.ACC_PUBLIC | MethodNode.ACC_STATIC | MethodNode.ACC_SYNTHETIC,
-						returnType,
-						method.parameters,
-						method.exceptions,
-						blockStatement
-					)
-				}
-
-				ooMethods.each { clazz.addMethod(it) }
 			}
 		}
 	}
