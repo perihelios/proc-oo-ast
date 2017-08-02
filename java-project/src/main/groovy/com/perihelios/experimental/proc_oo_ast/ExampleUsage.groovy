@@ -29,7 +29,7 @@ class ExampleUsage {
 		println "OO calls:"
 
 		List modified = list.sort()
-		list.lowercase()
+		list.lowercase() // Notice no assignment done--result ignored
 		modified = modified.appendToAll("X")
 
 		println "\tOriginal list: " + list
