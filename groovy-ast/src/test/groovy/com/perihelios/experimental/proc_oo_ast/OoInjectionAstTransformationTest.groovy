@@ -64,7 +64,7 @@ class OoInjectionAstTransformationTest extends GroovyTestCase {
 		|}
 	""".stripMargin().trim()).getClass("ValueHolder")
 
-	void test_ooMethodsAdded() {
+	void test_modifiersSetCorrectly() {
 		Method addedMethod
 		assert (addedMethod = transformed.declaredMethods.find {
 			it.name == "__oo_injection__set" && it.parameters.length == 2
@@ -73,19 +73,24 @@ class OoInjectionAstTransformationTest extends GroovyTestCase {
 		assert Modifier.isPublic(addedMethod.modifiers)
 		assert Modifier.isStatic(addedMethod.modifiers)
 		assert addedMethod.modifiers & Modifier.SYNTHETIC
+	}
+
+	void test_parametersReplicated() {
+		Method addedMethod = transformed.declaredMethods.find {
+			it.name == "__oo_injection__set" && it.parameters.length == 2
+		}
 
 		assert addedMethod.parameters[0].type.name == "ValueHolder"
 		assert addedMethod.parameters[0].getAnnotation(Deprecated)
 		assert addedMethod.parameters[1].type.name == "java.lang.String"
 		assert addedMethod.parameters[1].getAnnotation(Deprecated)
+	}
 
+	void test_defaultParameterValuesReplicated() {
 		Object instance = transformed.newInstance("initialValue")
 
-		transformed.__oo_injection__set(instance, "newValue")
-		assert instance.value == "newValue" : "Call passed through to underlying method"
-
 		transformed.__oo_injection__set(instance)
-		assert instance.value == "defaultValue" : "Default parameter values retained"
+		assert instance.value == "defaultValue"
 	}
 
 	void test_nonStaticMethodsNotAdded() {
@@ -150,6 +155,13 @@ class OoInjectionAstTransformationTest extends GroovyTestCase {
 				"com.perihelios.test.Foo, which has no copy constructor @ line 7, column 22."
 			assert message.cause.sourceLocator =~ /script[0-9]+\.groovy/
 		}
+	}
+
+	void test_nonOoCopyModifiesOriginal() {
+		Object instance = transformed.newInstance("initialValue")
+
+		transformed.__oo_injection__set(instance, "newValue")
+		assert instance.value == "newValue"
 	}
 
 	void test_ooCopyDoesNotModifyOriginal() {
