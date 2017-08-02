@@ -210,10 +210,6 @@ class ProcOoASTTransformation implements ASTTransformation {
 			for (ListIterator<? extends Expression> expressions = expr.expressions.listIterator(); expressions.hasNext(); ) {
 				expressions.set(tweakExpression(expressions.next()))
 			}
-		} else if (expr instanceof ArgumentListExpression) {
-			for (ListIterator<? extends Expression> expressions = expr.expressions.listIterator(); expressions.hasNext(); ) {
-				expressions.set(tweakExpression(expressions.next()))
-			}
 		}
 
 		return expr
