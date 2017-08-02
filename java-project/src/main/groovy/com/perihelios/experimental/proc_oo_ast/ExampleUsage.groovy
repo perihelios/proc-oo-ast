@@ -14,7 +14,7 @@ class ExampleUsage {
 	}
 
 	static void procedural(List list) {
-		System.out.println("Procedural call:")
+		println "Procedural calls:"
 		sort(list)
 		lowercase(list)
 		appendToAll(list, "X")
@@ -24,7 +24,7 @@ class ExampleUsage {
 	}
 
 	static void oo(List list) {
-		System.out.println("OO call:")
+		println "OO calls:"
 		List modified = list.sort()
 		list.lowercase()
 		modified = modified.appendToAll("X")
