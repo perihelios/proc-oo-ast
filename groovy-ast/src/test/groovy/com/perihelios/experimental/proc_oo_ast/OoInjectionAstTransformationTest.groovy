@@ -7,7 +7,7 @@ import org.codehaus.groovy.control.messages.SyntaxErrorMessage
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 
-class OoInjectedAstTransformationTest extends GroovyTestCase {
+class OoInjectionAstTransformationTest extends GroovyTestCase {
 	private AstTestHelper helper = new AstTestHelper()
 	private Class transformed = helper.parseCode("""
 		|import ${this.getClass().getPackage().name}.ObjectOriented

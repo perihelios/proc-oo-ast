@@ -24,7 +24,7 @@ import org.codehaus.groovy.transform.ASTTransformation
 import org.codehaus.groovy.transform.GroovyASTTransformation
 
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-class OoInjectedAstTransformation implements ASTTransformation {
+class OoInjectionAstTransformation implements ASTTransformation {
 	@Override
 	void visit(ASTNode[] nodes, SourceUnit source) {
 		source.AST.classes.each { ClassNode clazz ->

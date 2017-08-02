@@ -1,2 +1,2 @@
-com.perihelios.experimental.proc_oo_ast.OoInjectedAstTransformation
+com.perihelios.experimental.proc_oo_ast.OoInjectionAstTransformation
 com.perihelios.experimental.proc_oo_ast.ProcOoAstTransformation
