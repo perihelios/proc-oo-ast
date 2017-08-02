@@ -15,9 +15,11 @@ class ExampleUsage {
 
 	static void procedural(List list) {
 		println "Procedural calls:"
+
 		sort(list)
 		lowercase(list)
 		appendToAll(list, "X")
+
 		println "\tOriginal list: " + list
 		println "\tModified list: " + list
 		println "\t  All Uppercase? " + allUppercase(list)
@@ -25,9 +27,11 @@ class ExampleUsage {
 
 	static void oo(List list) {
 		println "OO calls:"
+
 		List modified = list.sort()
 		list.lowercase()
 		modified = modified.appendToAll("X")
+
 		println "\tOriginal list: " + list
 		println "\tModified list: " + modified
 		println "\t  All Uppercase? " + modified.allUppercase()
