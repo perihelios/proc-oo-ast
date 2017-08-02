@@ -85,19 +85,20 @@ class OoInjectionAstTransformation implements ASTTransformation {
 				}
 			}
 
-			blockStatement.addStatement(new ExpressionStatement(
-				new StaticMethodCallExpression(
-					clazz,
-					method.name,
-					new ArgumentListExpression(
-						[targetVariable] +
-							(method.parameters as List<Parameter>)
-								.subList(1, method.parameters.length).collect { Parameter param ->
-								new VariableExpression(param.name, param.type)
-							} as List<Expression>
+			blockStatement.addStatement(
+				new ExpressionStatement(
+					new StaticMethodCallExpression(
+						clazz,
+						method.name,
+						new ArgumentListExpression(
+							[targetVariable] +
+								(method.parameters as List<Parameter>)
+									.subList(1, method.parameters.length).collect { Parameter param ->
+									new VariableExpression(param.name, param.type)
+								} as List<Expression>
+						)
 					)
 				)
-			)
 			)
 
 			if (ooCopyNode && method.isVoidMethod()) {
