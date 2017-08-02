@@ -1,9 +1,6 @@
 package com.perihelios.experimental.proc_oo_ast
 
-import groovy.transform.CompileStatic
-
 @ObjectOriented
-@CompileStatic
 class List {
 	private final String[] elements
 
