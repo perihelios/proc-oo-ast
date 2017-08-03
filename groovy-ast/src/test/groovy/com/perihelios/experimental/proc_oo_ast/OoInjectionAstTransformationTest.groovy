@@ -12,7 +12,9 @@ class OoInjectionAstTransformationTest extends GroovyTestCase {
 	private Class transformed = helper.parseCode("""
 		|import ${this.getClass().getPackage().name}.ObjectOriented
 		|import ${this.getClass().getPackage().name}.OoCopy
+		|import groovy.transform.CompileStatic
 		|
+		|@CompileStatic
 		|@ObjectOriented
 		|class ValueHolder {
 		|    String value
