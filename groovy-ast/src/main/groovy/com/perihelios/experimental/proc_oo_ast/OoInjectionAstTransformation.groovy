@@ -42,7 +42,8 @@ class OoInjectionAstTransformation implements ASTTransformation {
 						).atLocation(copyAnnotation.lineNumber, copyAnnotation.columnNumber)
 					}
 
-					newMethod << copy(arguments[0]).toNewVariable(COPY_VARIABLE).ofType(type).usingCopyConstructor()
+					newMethod << copy(oldMethod.proceduralParameter.name)
+						.toNewVariable(COPY_VARIABLE).ofType(type).usingCopyConstructor()
 					newMethod << type.callStatic(oldMethod.name, arguments.drop(1).plus(0, COPY_VARIABLE))
 
 					if (oldMethod.voidMethod) {
