@@ -20,8 +20,8 @@ class OoInjectionAstTransformation implements ASTTransformation {
 	@Override
 	void visit(ASTNode[] nodes, SourceUnit source) {
 		use(AstCategory) {
-			source.AST.classes.findAll { it.hasAnnotation(ObjectOriented) }.each { ClassNode clazz ->
-				visitClass(clazz, source)
+			source.AST.classes.findAll { it.hasAnnotation(ObjectOriented) }.each { ClassNode type ->
+				visitClass(type, source)
 			}
 		}
 	}
