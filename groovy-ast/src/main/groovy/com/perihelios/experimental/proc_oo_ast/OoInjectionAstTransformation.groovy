@@ -29,7 +29,7 @@ class OoInjectionAstTransformation implements ASTTransformation {
 	private static void visitClass(ClassNode type, SourceUnit source) {
 		use(AstCategory) {
 			type << type.proceduralMethods.collect { MethodNode oldMethod ->
-				List<String> arguments = oldMethod.parameters*.name
+				List<String> paramNames = oldMethod.parameters*.name
 				MethodBuilder newMethod = oldMethod.buildCopyNamed(PREFIX + oldMethod.name)
 
 				if (oldMethod.proceduralParameter.hasAnnotation(OoCopy)) {
@@ -44,14 +44,15 @@ class OoInjectionAstTransformation implements ASTTransformation {
 
 					newMethod << copy(oldMethod.proceduralParameter.name)
 						.toNewVariable(COPY_VARIABLE).ofType(type).usingCopyConstructor()
-					newMethod << type.callStatic(oldMethod.name, arguments.drop(1).plus(0, COPY_VARIABLE))
+					paramNames[0] = COPY_VARIABLE
+					newMethod << type.callStatic(oldMethod.name, paramNames)
 
 					if (oldMethod.voidMethod) {
 						newMethod.useReturnType(type)
 						newMethod << returnVariable(COPY_VARIABLE)
 					}
 				} else {
-					newMethod << type.callStatic(oldMethod.name, arguments)
+					newMethod << type.callStatic(oldMethod.name, paramNames)
 				}
 
 				return newMethod
