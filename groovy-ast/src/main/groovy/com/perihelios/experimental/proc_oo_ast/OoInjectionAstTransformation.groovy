@@ -45,14 +45,14 @@ class OoInjectionAstTransformation implements ASTTransformation {
 					newMethod << copy(oldMethod.proceduralParameter.name)
 						.toNewVariable(COPY_VARIABLE).ofType(type).usingCopyConstructor()
 					paramNames[0] = COPY_VARIABLE
-					newMethod << type.callStatic(oldMethod.name, paramNames)
+					newMethod << oldMethod.callStatic(paramNames)
 
 					if (oldMethod.voidMethod) {
 						newMethod.useReturnType(type)
 						newMethod << returnVariable(COPY_VARIABLE)
 					}
 				} else {
-					newMethod << type.callStatic(oldMethod.name, paramNames)
+					newMethod << oldMethod.callStatic(paramNames)
 				}
 
 				return newMethod

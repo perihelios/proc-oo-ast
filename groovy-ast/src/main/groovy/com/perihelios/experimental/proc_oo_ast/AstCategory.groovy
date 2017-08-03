@@ -69,20 +69,21 @@ class AstCategory {
 		method
 	}
 
-	static Statement callStatic(ClassNode type, String methodName, List<String> arguments) {
-		List<VariableExpression> argumentVariables = arguments.collect { new VariableExpression(it) }
-		ArgumentListExpression argumentList = new ArgumentListExpression(argumentVariables)
-
-		new ExpressionStatement(
-			new StaticMethodCallExpression(type, methodName, argumentList)
-		)
-	}
-
 	static MethodBuilder buildCopyNamed(MethodNode oldMethod, String newName) {
 		new MethodBuilder(oldMethod).useName(newName)
 	}
 
 	static ReportError reportError(SourceUnit source, String message) {
 		return new ReportError(source, message)
+	}
+
+	static Statement callStatic(MethodNode method, List<String> arguments) {
+		ClassNode type = method.declaringClass
+		List<VariableExpression> argumentVariables = arguments.collect { new VariableExpression(it) }
+		ArgumentListExpression argumentList = new ArgumentListExpression(argumentVariables)
+
+		new ExpressionStatement(
+			new StaticMethodCallExpression(type, method.name, argumentList)
+		)
 	}
 }
