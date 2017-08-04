@@ -32,8 +32,16 @@ class MethodBuilder {
 	MethodBuilder useReturnType(ClassNode returnType) {
 		// Return type is finicky; if it represents a generic class with a concrete type parameter
 		//  (e.g., Foo<String>), you'll get an error: "A transform used a generics containing ClassNode..."
-		//  Copying the ClassNode (discarding generics info in the process) fixes this.
-		this.returnType = ClassHelper.make(returnType.name)
+		//  Copying the ClassNode (discarding generics info in the process) fixes this. BUT, you must set
+		//  the "redirect" (delegate) on the copy to point to the original so the new ClassNode will act
+		//  as if it were the original (e.g., node.methods will return correct values).
+		if (returnType.usingGenerics) {
+			this.returnType = ClassHelper.make(returnType.name)
+			this.returnType.setRedirect(returnType)
+		} else {
+			this.returnType = returnType
+		}
+
 		this
 	}
 
