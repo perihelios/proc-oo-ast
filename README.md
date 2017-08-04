@@ -4,7 +4,7 @@ A quick example of global AST transformations in Groovy and how other languages
 
 ## Overview
 Object-oriented (OO) programming is a popular paradigm. However, a large portion
-of OO is simply tricks by the compiler to allow a syntax that is view as more
+of OO is simply tricks by the compiler to allow a syntax that is viewed as more
 desirable.
 
 For example, consider a class written in pseudocode:
@@ -57,12 +57,12 @@ transformations provide an easy way to hook into the compilation process.
 
 ## Usage
 A "module" (term intended to cover non-OO languages) is represented here as
-a class; the class has data members, but no true methods (instance methods);
-thus, the module represents a data structure, rather than a true OO class.
-(*Note:* Modules in this project are annotated with `@ObjectOriented`; this
-is an arbitrary way to signal that a Groovy class is really a module, since
-we're piggybacking the module concept on top of a class. Other languages might
-use another mechanism to signal this, or have their own concept of a module.)
+a class; the class has data members, but no true (instance) methods; thus, the
+module represents a data structure, rather than a true OO class. (*Note:*
+Modules in this project are annotated with `@ObjectOriented`; this is an
+arbitrary way to signal that a Groovy class is really a module, since we're
+piggybacking the module concept on top of a class. Other languages might use
+another mechanism to signal this, or have their own concept of a module.)
 
 Modules can further define procedures (as static methods, in our Groovy world);
 the module acts as a namespace for the procedures. If a procedure defines an
@@ -91,7 +91,7 @@ class Cat {
 }
 ```
 
-A procedural usage of the module is as you would expect; procedures are under
+A procedural usage of the module is as you would expect: Procedures are under
 the Cat namespace, take a Cat data structure as their first argument, and (in
 the case of `set*`) mutate the passed structure.
 
@@ -125,8 +125,9 @@ context, but *augment the OO APIs* to behave immutably, if desired.
 The `@OoCopy` annotation is for this purpose. When applied to the data structure
 parameter of a procedure, a copy is made of the data structure before the
 procedure is executed. If the return type of the procedure is `void`, the return
-type of the OO method will be adjusted to be that of the data structure. In
-order for a copy to be made, the data structure must provide a copy-constructor.
+type of the OO method will be adjusted to be that of the data structure, so the
+copy can be returned. In order for a copy to be made, the data structure must
+provide a copy-constructor.
 
 Here's a trivial example, featuring a module for lists of strings:
 
@@ -204,9 +205,9 @@ is responsible for adding wrapper procedures that receive calls made in an OO
 context. This allows copying of data structures annotated with `@OoCopy`.
 
 [MethodCallToProcCallAstTransformation](groovy-ast/src/main/groovy/com/perihelios/experimental/proc_oo_ast/MethodCallToProcCallAstTransformation.groovy)
-uses a visitor pattern to change OO-style calls (`obj.method(arg)`) into
-procedural calls (`method(obj, arg)`).
+uses a visitor pattern to change OO-style calls, like `obj.foo(arg)`, into
+procedural calls, such as `foo(obj, arg)`.
 
-Much of the grunge work of the AST transformations is moved into categories or
-builders, allowing a cleaner API in the transformation code, so it's easier to
-see how the transformations actually work.
+Much of the grunge work of the AST transformations is moved into other category
+or builder classes, using a cleaner API in the transformation code so it's
+easier to see how the transformations actually work.
