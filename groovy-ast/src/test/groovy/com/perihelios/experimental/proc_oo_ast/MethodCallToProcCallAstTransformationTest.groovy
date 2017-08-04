@@ -6,6 +6,7 @@ class MethodCallToProcCallAstTransformationTest extends GroovyTestCase {
 		|import ${this.getClass().getPackage().name}.ObjectOriented
 		|import ${this.getClass().getPackage().name}.OoCopy
 		|import groovy.transform.CompileStatic
+		|##IMPORTS##
 		|
 		|@CompileStatic
 		|@ObjectOriented
@@ -68,6 +69,26 @@ class MethodCallToProcCallAstTransformationTest extends GroovyTestCase {
 		assert Compiled.ooMethodCalls == 1
 	}
 
+	void test_qualifiedStaticCall() {
+		Class<?> Compiled = compile("""
+		|Module.call(m)
+		""")
+
+		Compiled.doIt()
+
+		assert Compiled.ooMethodCalls == 0
+	}
+
+	void test_importedStaticCall() {
+		Class<?> Compiled = compile("""
+		|call(m)
+		""", "static Module.*")
+
+		Compiled.doIt()
+
+		assert Compiled.ooMethodCalls == 0
+	}
+
 	void test_nestedCall() {
 		Class<?> Compiled = compile("""
 		|String.valueOf(m.call())
@@ -122,8 +143,10 @@ class MethodCallToProcCallAstTransformationTest extends GroovyTestCase {
 		assert Compiled.ooMethodCalls == 3
 	}
 
-	private Class<?> compile(String snippet) {
-		helper.parseCode(stub.replace("##CODE##", snippet.stripMargin().trim()))
+	private Class<?> compile(String snippet, String... additionalImports) {
+		String code = stub.replace("##CODE##", snippet.stripMargin().trim())
+		code = code.replace("##IMPORTS##", additionalImports.collect {"import $it" }.join("\n"))
+		helper.parseCode(code)
 
 		return helper.getClass("ModuleUser")
 	}

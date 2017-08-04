@@ -37,6 +37,7 @@ class MethodCallToProcCallAstTransformation implements ASTTransformation {
 				Expression objExpr = call.objectExpression
 
 				if (!objExpr.type.hasAnnotation(ObjectOriented)) return
+				if (objExpr instanceof ClassExpression) return
 
 				ConstantExpression methodExpr = call.method as ConstantExpression
 				ArgumentListExpression argListExpr = call.arguments as ArgumentListExpression
