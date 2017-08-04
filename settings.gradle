@@ -1,4 +1,4 @@
 rootProject.name = 'proc-oo-ast'
 
 include 'groovy-ast'
-include 'java-project'
+include 'usage-project'
