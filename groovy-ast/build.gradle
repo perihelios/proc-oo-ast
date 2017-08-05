@@ -1,17 +1,1 @@
-group 'com.perihelios.experimental'
-version '0.0.1'
-
-apply plugin: 'groovy'
-apply plugin: 'java'
-
 sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
-
-	testCompile "junit:junit:4.12"
-}
