@@ -211,3 +211,6 @@ procedural calls, such as `foo(obj, arg)`.
 Much of the grunge work of the AST transformations is moved into other category
 or builder classes, using a cleaner API in the transformation code so it's
 easier to see how the transformations actually work.
+
+## License
+Apache 2.0 (see [LICENSE.txt] and [NOTICE.txt] for details).
