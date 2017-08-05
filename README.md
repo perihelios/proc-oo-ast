@@ -213,4 +213,4 @@ or builder classes, using a cleaner API in the transformation code so it's
 easier to see how the transformations actually work.
 
 ## License
-Apache 2.0 (see [LICENSE.txt] and [NOTICE.txt] for details).
+Apache 2.0 (see [LICENSE.txt](LICENSE.txt) and [NOTICE.txt](NOTICE.txt) for details).
