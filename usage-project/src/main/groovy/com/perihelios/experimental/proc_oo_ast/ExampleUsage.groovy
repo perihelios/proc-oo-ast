@@ -21,7 +21,8 @@ import groovy.transform.CompileStatic
 class ExampleUsage {
 	static void main(String[] args) {
 		StrList input = new StrList("A", "C", "B")
-		println "\n\nInput: " + input
+		print "\n\nInput: "
+		StrList.print(input)
 
 		procedural(new StrList(input))
 		oo(new StrList(input))
